@@ -18,7 +18,7 @@ async function handle_update(update) {
         for (const word of blacklist) {
             if (_message.includes(word)) return
         }
-        payload.content = update.message.text
+        payload.content = "# 〓 Update\n" + update.message.text
         await send_webhook_message(DISCORD_WEBHOOK, payload)
     } catch (error) {
         console.log("UPDATE", error)
