@@ -4,8 +4,11 @@ const { StringSession } = require("telegram/sessions")
 const { NewMessage } = require("telegram/events")
 
 const pkg = require("../../../package.json")
+const keywords = require("../../config/keywords.json")
+
 const { SESSION, API_ID, API_HASH } = require("../../config/app.config")
 const { Channel } = require("../pot/models/index")
+const { handle_update } = require("./event/index")
 
 const stringSession = new StringSession(SESSION) // fill this later with the value from session.save()
 
@@ -27,26 +30,26 @@ async function launch() {
             phoneNumber: async () => await input.text("number ?"),
             password: async () => await input.text("password ?"),
             phoneCode: async () => await input.text("code ?"),
-            onError: (err) => console.log(err),
+            onError: (error) => console.log(error),
         })
 
         console.log("Add Event Handler")
-        // await add_event_handlers()
-
+        await add_event_handlers()
+        console.log("You should now be connected")
     } catch (error) {
-        console.log(error)
+        console.log("LAUNCH", error)
     }
 }
 
 async function add_event_handlers() {
+    const pattern = new RegExp(keywords.join("|"), "i");
     try {
-        const filtred_ids = await getAllChannelIds()
+        // const filtred_ids = await getAllChannelIds()
 
-        client.addEventHandler(handle_update, new NewMessage({ chats: filtred_ids }))
-
-        console.log("You should now be connected")
+        // client.addEventHandler(handle_update, new NewMessage({ chats: filtred_ids }))
+        client.addEventHandler(handle_update, new NewMessage({ pattern }))
     } catch (error) {
-        console.log(error)
+        console.log("ADD EVENT", error)
     }
 }
 
