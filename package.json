@@ -1,7 +1,7 @@
 {
   "name": "gram-journey",
-  "version": "1.1.1",
-  "description": "",
+  "version": "1.1.2",
+  "description": "Test gram.js aggregation tool. [TEST PROJECT]",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

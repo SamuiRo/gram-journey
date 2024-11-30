@@ -5,19 +5,22 @@ const { DISCORD_WEBHOOK } = require("../../../config/app.config")
 
 const blacklist_words = require("../../../config/blacklist_words.json")
 
-const blacklist = new Set(blacklist_words)
+// Перетворюємо слова чорного списку в Set для швидкої перевірки
+const blacklist = new Set(blacklist_words.map(word => word.toLowerCase().trim()));
 
 async function handle_update(update) {
     const payload = {}
     try {
-        const _message = update.message.text.toLowerCase()
+        // Перевіряємо, чи є текст у повідомленні
+        const message_text = update?.message?.text?.toLowerCase();
+        if (!message_text) return;
         console.log(update)
+
+        // Перевіряємо, чи текст містить будь-яке слово з чорного списку
+        const contains_black_listed_word = Array.from(blacklist).some(word => message_text.includes(word));
+        if (contains_black_listed_word) return;
         // console.log(update?.message?.media)
 
-        // Перевіряємо, чи міститься яке-небудь ключове слово
-        for (const word of blacklist) {
-            if (_message.includes(word)) return
-        }
         payload.content = "# 〓 Update\n" + update.message.text
         await send_webhook_message(DISCORD_WEBHOOK, payload)
     } catch (error) {
