@@ -4,12 +4,12 @@ const { StringSession } = require("telegram/sessions")
 const { NewMessage } = require("telegram/events")
 
 const pkg = require("../../../package.json")
-const keywords = require("../../config/keywords.json")
 
 const { SESSION, API_ID, API_HASH } = require("../../config/app.config")
-const { Channel } = require("../pot/models/index")
+const { Channel, List } = require("../pot/models/index")
 const { handle_update } = require("./event/index")
 
+let keywords
 const stringSession = new StringSession(SESSION) // fill this later with the value from session.save()
 
 const client_options = {
@@ -32,6 +32,9 @@ async function launch() {
             phoneCode: async () => await input.text("code ?"),
             onError: (error) => console.log(error),
         })
+
+        const whitelist_keywords = await List.findOne({ where: { type: "whitelist" } })
+        keywords = whitelist_keywords.keywords
 
         console.log("Add Event Handler")
         await add_event_handlers()
