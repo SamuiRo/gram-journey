@@ -21,7 +21,11 @@ async function handle_update(update) {
         if (contains_black_listed_word) return;
         // console.log(update?.message?.media)
 
-        payload.content = "# 〓 Update\n" + update.message.text
+        let sanitized_content = message_text
+            .replace(/@here/g, 'here')
+            .replace(/@everyone/g, 'everyone');
+
+        payload.content = "# 〓 Update\n" + sanitized_content
         await send_webhook_message(DISCORD_WEBHOOK, payload)
     } catch (error) {
         console.log("UPDATE", error)

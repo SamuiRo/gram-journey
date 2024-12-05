@@ -1,6 +1,6 @@
 {
   "name": "gram-journey",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Test gram.js aggregation tool. [TEST PROJECT]",
   "main": "index.js",
   "scripts": {
